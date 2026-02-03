@@ -42,7 +42,7 @@ jobs:
           ${{ runner.os }}-playwright-
 
     - name: Install Chromium and Firefox only
-      run: npx playwright install chromium firefox
+      run: npx playwright install --with-deps
 
     - name: Run pre-tests setup
       run: npm run setup
@@ -52,3 +52,11 @@ jobs:
 
     - name: Run Playwright Mobile tests
       run: npm run Phone_Tests
+
+      
+    - name: Upload Playwright report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: playwright-report
+        path: playwright-report/
