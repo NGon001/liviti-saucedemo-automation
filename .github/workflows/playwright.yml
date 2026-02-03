@@ -1,0 +1,54 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    env:
+      STANDART_USERNAME: ${{ secrets.STANDART_USERNAME }}
+      STANDART_PASSWORD: ${{ secrets.STANDART_PASSWORD }}
+      USERDATA_PATH: ${{ secrets.USERDATA_PATH }}
+      BASE_URL: ${{ secrets.BASE_URL }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install trcli
+
+    - name: Cache Playwright browsers
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/ms-playwright
+        key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-playwright-
+
+    - name: Install Chromium and Firefox only
+      run: npx playwright install chromium firefox
+
+    - name: Run pre-tests setup
+      run: npm run setup
+
+    - name: Run Playwright PC tests
+      run: npm run PC_Tests
+
+    - name: Run Playwright Mobile tests
+      run: npm run Phone_Tests
