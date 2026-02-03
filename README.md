@@ -32,6 +32,7 @@ npm install
 STANDART_USERNAME=standard_user
 STANDART_PASSWORD=secret_sauce
 BASE_URL=https://www.saucedemo.com
+USERDATA_PATH =../.auth/user-session.json
 ```
 
 ### Run tests using the following command:
