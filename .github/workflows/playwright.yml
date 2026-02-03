@@ -50,13 +50,19 @@ jobs:
     - name: Run Playwright PC tests
       run: npm run PC_Tests
 
-    - name: Run Playwright Mobile tests
-      run: npm run Phone_Tests
-
-      
-    - name: Upload Playwright report
+    - name: Upload Playwright PC report
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: playwright-report
+        name: playwright-report_PC
+        path: playwright-report/
+
+    - name: Run Playwright Mobile tests
+      run: npm run Phone_Tests
+
+    - name: Upload Playwright Phone report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: playwright-report_Phone
         path: playwright-report/
